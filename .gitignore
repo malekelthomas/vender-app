@@ -34,3 +34,6 @@ build/
 
 ### Node Modules ###
 /node_modules
+
+### App Props ###
+/src/main/resources/application.properties
