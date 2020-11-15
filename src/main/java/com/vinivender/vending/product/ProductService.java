@@ -1,35 +1,61 @@
 package com.vinivender.vending.product;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.EntityNotFoundException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductService {
     
+    /**
+     *
+     */
+    private static final String DATA = "data";
+    @Autowired
+    private ProductRepository productRepository;
     
-    private Map<String, Product[]> Products(){
-        Map<String, Product[]> productsData = new HashMap<String, Product[]>();
-        Product[] products = {new Product("1","Doritos","$1.00","Nacho Cheese"), new Product("2","Doritos","$1.00","Cool Ranch")}; 
+    private static ArrayList<Product> products = new ArrayList<>();
+
+    private static Map<String, ArrayList<Product>> productsData; 
+    static {
+        productsData = new HashMap<String, ArrayList<Product>>();
+        productsData.put(DATA, products);
+    }
+        
+
+    public Map<String, ArrayList<Product>> getAllProducts(){
+        
+        ArrayList<Product> products = new ArrayList<>();
+        productRepository.findAll()
+        .forEach(products::add); //load products from database and add to products ArrayList
+        Map<String, ArrayList<Product>> productsData = new HashMap<String, ArrayList<Product>>(); //reinit HashMap, add new Data
         {
-            productsData.put("data", products);
+            productsData = new HashMap<String, ArrayList<Product>>();
+            productsData.put(DATA, products);
         }
         return productsData;
     }
 
-    public Map<String, Product[]> getAllProducts(){
-        return Products();
+    public Product getProduct(Integer id){
+        //return productsData.get(DATA).stream().filter(p -> p.getId().equals(id)).findFirst().get();
+        Product product = productRepository.findById(id)
+        .orElse(null);
+
+        return product;
     }
 
-    public Product getProduct(String id){
-        Product product = new Product();
-        for(int i = 0; i <Products().get("data").length; i++){
-            if(Products().get("data")[i].getId().equals(id)){
-                product = Products().get("data")[i];
-            }
 
-        }
-        return product;
+    public void addProduct(Product product){
+        productsData.computeIfAbsent(DATA, k -> new ArrayList<>()).add(product);
+        productRepository.save(product);
+        System.out.println(productsData.get(DATA));
+
+
     }
 }
