@@ -1,8 +1,16 @@
 package com.vinivender.vending.product;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Product {
 
-    private String id;
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Integer id;
     private String productName;
     private String price;
     private String description;
@@ -11,7 +19,7 @@ public class Product {
 
     }
 
-    public Product(String id, String productName, String price, String description) {
+    public Product(Integer id, String productName, String price, String description) {
         super();
         this.id = id;
         this.productName = productName;
@@ -22,11 +30,11 @@ public class Product {
     
     
 
-    public String getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
