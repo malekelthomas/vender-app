@@ -51,6 +51,11 @@ var Container = function Container() {
       products = _useState4[0],
       setProducts = _useState4[1];
 
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+      _useState6 = _slicedToArray(_useState5, 2),
+      product = _useState6[0],
+      setProduct = _useState6[1];
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     function fetchData() {
       return _fetchData.apply(this, arguments);
@@ -86,18 +91,63 @@ var Container = function Container() {
 
     fetchData();
   }, [products]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    function fetchData() {
+      return _fetchData2.apply(this, arguments);
+    }
+
+    function _fetchData2() {
+      _fetchData2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+        var res;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return fetch("/products/1");
+
+              case 2:
+                res = _context2.sent;
+                res.json().then(function (res) {
+                  setProduct(res);
+                })["catch"](function (err) {
+                  return setErrors(err);
+                });
+
+              case 4:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }));
+      return _fetchData2.apply(this, arguments);
+    }
+
+    fetchData();
+  }, []);
+  var id = product.id,
+      productName = product.productName,
+      price = product.price,
+      description = product.description;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, !products.length ?
   /*#__PURE__*/
   //wait for products to have data
-  react__WEBPACK_IMPORTED_MODULE_0__.createElement("h1", null, "Loading Data...") : products.map(function (product) {
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement("h1", null, "Loading Data...") : products.map(function (someProduct) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Product__WEBPACK_IMPORTED_MODULE_2__.default, {
-      key: product.id,
-      id: product.id,
-      productName: product.productName,
-      price: product.price,
-      description: product.description
+      key: someProduct.id,
+      id: someProduct.id,
+      productName: someProduct.productName,
+      price: someProduct.price,
+      description: someProduct.description
     }));
-  }));
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Product__WEBPACK_IMPORTED_MODULE_2__.default, {
+    key: id,
+    id: id,
+    productName: productName,
+    price: price,
+    description: description
+  })));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Container);
