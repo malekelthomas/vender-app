@@ -4,6 +4,7 @@ import Product from './Product';
 const Container = () => {
     const [hasError, setErrors] = useState(false);
     const [products, setProducts] = useState([]);
+    const [product, setProduct] = useState("");
     useEffect(() =>{
         async function fetchData(){
             const res = await fetch("/products");
@@ -17,19 +18,36 @@ const Container = () => {
         }
         fetchData();
     }, [products])
+    useEffect(() =>{
+        async function fetchData(){
+            const res = await fetch("/products/1");
+            res
+                .json()
+                .then(res => {
+                    setProduct(res)
+                })
+                .catch(err => setErrors(err));
+
+        }
+        fetchData();
+    }, [])
     
+    const {id, productName, price, description} = product;
     return (
         <div>
             {
                 !products.length ? //wait for products to have data
                     <h1>Loading Data...</h1>
                     :
-                    products.map(product => (
+                    products.map(someProduct => (
                         <div>
-                        <Product key={product.id} id={product.id} productName={product.productName} price={product.price} description={product.description}/>
+                        <Product key={someProduct.id} id={someProduct.id} productName={someProduct.productName} price={someProduct.price} description={someProduct.description}/>
                         </div>
                     ))
-            }
+                }
+            <div>
+                <Product key={id} id={id} productName={productName} price={price} description={description}/>
+            </div>
         </div>
     )
 }
