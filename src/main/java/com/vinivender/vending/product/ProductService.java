@@ -21,4 +21,15 @@ public class ProductService {
     public Map<String, Product[]> getAllProducts(){
         return Products();
     }
+
+    public Product getProduct(String id){
+        Product product = new Product();
+        for(int i = 0; i <Products().get("data").length; i++){
+            if(Products().get("data")[i].getId().equals(id)){
+                product = Products().get("data")[i];
+            }
+
+        }
+        return product;
+    }
 }
