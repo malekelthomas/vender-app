@@ -2,15 +2,15 @@ package com.vendingmachines.vms.vendingmachine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import javax.persistence.CollectionTable;
+
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+
 
 @Entity
 public class VendingMachine {
@@ -21,7 +21,7 @@ public class VendingMachine {
     private String owner;
     
     @ElementCollection
-    private List<Integer> inventory; //Product IDs
+    private Map<String,Integer> inventory; //Product IDs(inventory_key in DB), Quantity(inventory in DB)
 
 
 
@@ -55,12 +55,18 @@ public class VendingMachine {
         this.owner = owner;
     }
 
-    public List<Integer> getInventory() {
+    public Map<String,Integer> getInventory() {
         return this.inventory;
     }
 
-    public void addToInventory(Integer productId) {
-        this.inventory.add(productId);
+    public void addToInventory(String productId, Integer quantity) {
+        if(this.inventory.containsKey(productId)){
+            Integer newQuantity = this.inventory.get(productId)+quantity;
+            this.inventory.put(productId, newQuantity);
+        }
+        else{
+            this.inventory.put(productId, quantity);
+        }
     }
 
 }

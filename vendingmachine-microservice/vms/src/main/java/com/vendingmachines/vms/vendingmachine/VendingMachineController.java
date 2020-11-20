@@ -34,14 +34,14 @@ public class VendingMachineController {
         this.vmService.registerVendingMachine(persistentVM);
     }
 
-    @PostMapping("/vendingmachines/{id}/inventory/add")
-    public void addProductToInventory(@RequestBody ProductDTO product, @PathVariable Integer id){
+    @PostMapping("/vendingmachines/{id}/inventory/add/{quantity}")
+    public void addProductToInventory(@RequestBody ProductDTO product, @PathVariable Integer quantity, @PathVariable Integer id){
         /* Product persistentProduct = new Product();
         persistentProduct.setId(product.getId());
         persistentProduct.setProductName(product.getProductName());
         persistentProduct.setPrice(product.getPrice());
         persistentProduct.setDescription(product.getDescription()); */
-        Integer productId = product.getId();
-        this.vmService.addProductToInventory(id, productId);
+        String productId = Integer.toString(product.getId());
+        this.vmService.addProductToInventory(id, productId, quantity);
     }
 }

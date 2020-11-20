@@ -52,9 +52,9 @@ public class VendingMachineService {
         System.out.println(vmsData.get(DATA));
     }
 
-    public void addProductToInventory(Integer vmId, Integer productId){
+    public void addProductToInventory(Integer vmId, String productId, Integer quantity){
         VendingMachine vm = getVendingMachine(vmId);
-        vm.addToInventory(productId);
+        vm.addToInventory(productId, quantity);
         vmRepository.save(vm);
 
     }
