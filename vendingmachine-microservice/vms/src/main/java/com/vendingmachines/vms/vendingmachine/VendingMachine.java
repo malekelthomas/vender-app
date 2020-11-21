@@ -20,6 +20,7 @@ public class VendingMachine {
     private Integer id;
     private String owner;
     
+ 
     @ElementCollection
     private Map<String,Integer> inventory; //Product IDs(inventory_key in DB), Quantity(inventory in DB)
 
