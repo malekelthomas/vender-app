@@ -10,16 +10,13 @@ import { useMediaQuery } from '@material-ui/core/';
 const useStyles = makeStyles({
     root: {
         maxWidth: 300,
-        height:700,
-        background:'lightgray',
+        background:'lightblue',
         margin:'1em auto',
       },
       rootMobile: {
-        height:700,
         maxWidth: 200,
-        background:'lightgray',
+        background:'lightblue',
         margin:'1em auto',
-        padding:50
       },
       bullet: {
         display: 'inline-block',
@@ -35,7 +32,9 @@ const useStyles = makeStyles({
 });
 
 const Product = ({id, quantity}) => {
+    const classes = useStyles();
     const [product, setProduct] = useState("");
+    const isDesktop = useMediaQuery('(max-width:900px)');
     useEffect(() => {
         async function fetchProduct(){
             const res = await fetch(`/products/${id}`);
@@ -51,9 +50,11 @@ const Product = ({id, quantity}) => {
     }, [])
     
     return (
-        <div>
+        <Card className={isDesktop ? classes.root: classes.rootMobile}>
+          <CardContent>
             <Typography variant="body2">ProductID:{product.id} Product Name:{product.productName} Price:{product.price} Product Description:{product.description} Quantity: {quantity}</Typography>
-        </div>
+          </CardContent>
+        </Card>
         
     )
 }
