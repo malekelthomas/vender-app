@@ -2,53 +2,45 @@ import React, { useState, useEffect } from 'react';
 import './css/Container.css';
 import Product from './Product';
 import VendingMachine from './VendingMachine';
+import {Route, BrowserRouter as Router, Switch, Link} from 'react-router-dom';
+import { AppBar, Menu, MenuItem, Typography } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
 const Container = () => {
-    const [hasError, setErrors] = useState(false);
-    const [products, setProducts] = useState([]);
-    const [vendingMachines, setVendingMachines] = useState([]);
-    useEffect(() =>{
-        async function fetchProducts(){
-            const res = await fetch("/products/");
-            res
-                .json()
-                .then(res => {
-                    setProducts(res.data)
-                })
-                .catch(err => setErrors(err));
-
-        }
-        async function fetchVendingMachines(){
-            const res = await fetch("/vendingmachines/");
-            res
-                .json()
-                .then(res => {
-                    setVendingMachines(res.data)
-                })
-                .catch(err => setErrors(err));
-
-        }
-        fetchVendingMachines();
-        fetchProducts();
-    }, [])
+    const useStyles = makeStyles((theme) => ({
+        root: {
+          flexGrow: 1,
+        },
+        menuButton: {
+          marginRight: theme.spacing(2),
+        },
+        title: {
+          flexGrow: 1,
+        },
+      }));
     
-
+    
+    const classes = useStyles();
     return (
-        <div>
-                {
-                    !vendingMachines.length ?
-                    <h1>Loading Vending Machines...</h1>
-                    :
-                    vendingMachines.map(someVendingMachine => (
-                        <div>
-                            <VendingMachine 
-                                key={someVendingMachine.id} 
-                                id={someVendingMachine.id} 
-                                owner={someVendingMachine.owner} 
-                                inventory={someVendingMachine.inventory}
-                            />
-                        </div>
-                    ))
-                }
+        <div className={classes.root}>
+            <Router>
+                <AppBar>
+                    <MenuItem>
+                        <Link to="/vendingmachines/">
+                            <Typography className={classes.title} variant="h6" noWrap>Vending Machines</Typography>
+                        </Link>
+                    </MenuItem>
+                    <MenuItem>
+                        <Link to="/vendingmachines/1">
+                            <Typography className={classes.title} variant="h6" noWrap>Vending Machine 1</Typography>
+                        </Link>
+                    </MenuItem>
+                </AppBar>
+            
+                <Switch>
+                    <Route path="/vendingmachines/:id?" component={VendingMachine}></Route>
+                    <Route path="/products/:id?" component={Product}></Route>
+                </Switch>
+            </Router>
         </div>
     )
 }
