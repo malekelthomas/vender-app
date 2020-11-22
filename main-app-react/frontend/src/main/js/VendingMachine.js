@@ -7,18 +7,19 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { useMediaQuery } from '@material-ui/core/';
 import Product from './Product';
+
 const useStyles = makeStyles({
     root: {
         maxWidth: 600,
         height:800,
         background:'lightgray',
-        margin:'1em auto',
+        margin:'10em auto',
       },
       rootMobile: {
         height:800,
         maxWidth: 300,
         background:'lightgray',
-        margin:'1em auto',
+        margin:'10em auto',
         padding:50
       },
       bullet: {
@@ -35,23 +36,76 @@ const useStyles = makeStyles({
 });
 
 
-const VendingMachine = ({id, owner, inventory}) => {
+const VendingMachine = ({match}) => {
     const classes = useStyles();
     const isDesktop = useMediaQuery('(max-width:900px)');
+    const {id} = match.params;
+    const [vendingMachines, setVendingMachines] = useState([]);
+    const [vendingMachine, setVendingMachine] = useState("");
+    useEffect(() =>{
+      async function fetchVendingMachines(){
+        if(id != null){
+          const res = await fetch(`/vendingmachines/${id}`)
+          res
+            .json()
+            .then(res => {
+              console.log(res)
+              console.log(id) 
+              setVendingMachine(res)
+            })
+            .catch(err => setErrors(err));
+
+        }
+        else{
+          const res = await fetch("/vendingmachines/")
+          res
+            .json()
+            .then(res => {
+              console.log(res)
+              setVendingMachines(res.data);
+            })
+            .catch(err => setErrors(err));
+          }
+
+      }
+      fetchVendingMachines();
+    }, [match.params.id]) //updates when id changes
+
+
     return (
+    
+        id && vendingMachine != "" ?
         <Card className={isDesktop ? classes.root : classes.rootMobile}>
+          {console.log(vendingMachine)}
             <CardContent justify='content'>
-                <Typography variant="body2">Vending Machine Id:{id}</Typography>
-                <Typography>Owner: {owner}</Typography>
+                <Typography variant="body2">Vending Machine Id:{vendingMachine.id}</Typography>
+                <Typography>Owner: {vendingMachine.owner}</Typography>
                 <Typography variant="body2">Products:</Typography>
-                {Object.keys(inventory).map(productId => (
-                    <Product 
-                      id={productId} 
-                      quantity={inventory[productId]}
-                    />
-                ))}
+                {Object.keys(vendingMachine.inventory).map(productId => (
+                  <Product 
+                  id={productId} 
+                  quantity={vendingMachine.inventory[productId]}
+                  />
+                  ))}
             </CardContent>
-        </Card>
+          </Card>
+          :
+
+        vendingMachines.map(someVendingMachine=> (
+          <Card className={isDesktop ? classes.root : classes.rootMobile}>
+            <CardContent justify='content'>
+                <Typography variant="body2">Vending Machine Id:{someVendingMachine.id}</Typography>
+                <Typography>Owner: {someVendingMachine.owner}</Typography>
+                <Typography variant="body2">Products:</Typography>
+                {Object.keys(someVendingMachine.inventory).map(productId => (
+                  <Product 
+                  id={productId} 
+                  quantity={someVendingMachine.inventory[productId]}
+                  />
+                  ))}
+            </CardContent>
+          </Card>
+      ))
         
     )
 }
