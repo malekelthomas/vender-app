@@ -42,6 +42,7 @@ const VendingMachine = ({match}) => {
     const {id} = match.params;
     const [vendingMachines, setVendingMachines] = useState([]);
     const [vendingMachine, setVendingMachine] = useState("");
+    const [error, setErrors] = useState([]);
     useEffect(() =>{
       async function fetchVendingMachines(){
         if(id != null){
