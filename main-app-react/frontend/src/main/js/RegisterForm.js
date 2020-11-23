@@ -25,9 +25,24 @@ const RegisterForm = () => {
     const [email, setEmail] = useState("");
     const [pw, setPw] = useState("");
     const [owner, setOwner] = useState(false);
+    const [error, setErrors] = useState([]);
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(email,pw);
+        async function register(){
+          const res= await fetch("/users/",{
+            method: 'POST',
+            headers:{
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({firstName, lastName, email, password:pw})
+          })
+          res
+            .json()
+            .then(res => console.log(res))
+            .catch(err => setErrors(err));
+        }
+        register();
     }
 
     const handleChange = (e) => {
